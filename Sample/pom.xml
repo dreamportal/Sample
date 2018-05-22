@@ -1,75 +1,146 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <groupId>com.tibco.bw</groupId>
-    <artifactId>Sample.parent</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
-    <relativePath>../Sample.parent</relativePath>
-  </parent>
-  <artifactId>Sample</artifactId>
-  <packaging>bwear</packaging>
+  <groupId>com.tibco.plugins</groupId>
+  <artifactId>bw6-maven-plugin</artifactId>
+  <version>1.3.1</version>
+  <packaging>maven-plugin</packaging>
+
+  <name>Plugin Code for Apache Maven and TIBCO BusinessWorks™</name>
+
+  <description>
+    Plugin Code for Apache Maven and TIBCO BusinessWorks™.
+    This is the Maven Plugin for BW6 and BWCE Build. 
+  </description>
+
   <properties>
-    <docker.property.file>docker-dev.properties</docker.property.file>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-plugin-api</artifactId>
+      <version>3.3.3</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-core</artifactId>
+      <version>3.3.3</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-compat</artifactId>
+      <version>3.3.3</version>
+    </dependency>		
+    <dependency>
+      <groupId>org.apache.maven.plugin-tools</groupId>
+      <artifactId>maven-plugin-annotations</artifactId>
+      <version>3.4</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-archiver</artifactId>
+      <version>2.5</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-embedder</artifactId>
+      <version>3.1.0</version>
+    </dependency>
+    <dependency>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
+      <version>1.3.2</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.plugins</groupId>
+      <artifactId>maven-compiler-plugin</artifactId>
+      <version>3.3</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.shared</groupId>
+      <artifactId>maven-dependency-tree</artifactId>
+      <version>2.1</version>
+    </dependency>
+    <dependency>
+        <groupId>javax.xml.bind</groupId>
+        <artifactId>jaxb-api</artifactId>
+        <version>2.2.7</version>
+    </dependency>
+    <dependency>
+        <groupId>org.glassfish.jersey.core</groupId>
+        <artifactId>jersey-client</artifactId>
+        <version>2.21.1</version>
+    </dependency>
+    <dependency>
+        <groupId>org.glassfish.jersey.media</groupId>
+        <artifactId>jersey-media-multipart</artifactId>
+        <version>2.21.1</version>
+    </dependency>
+    <dependency>
+        <groupId>com.fasterxml.jackson.core</groupId>
+        <artifactId>jackson-core</artifactId>
+        <version>2.6.1</version>
+    </dependency>
+    <dependency>
+        <groupId>com.fasterxml.jackson.jaxrs</groupId>
+        <artifactId>jackson-jaxrs-base</artifactId>
+        <version>2.6.1</version>
+    </dependency>
+     <dependency>
+        <groupId>com.fasterxml.jackson.module</groupId>
+        <artifactId>jackson-module-jaxb-annotations</artifactId>
+        <version>2.6.1</version>
+    </dependency>
+     <dependency>
+        <groupId>org.glassfish.jersey.media</groupId>
+        <artifactId>jersey-media-json-jackson</artifactId>
+        <version>2.21.1</version>
+    </dependency>
+    <dependency>
+        <groupId>com.fasterxml.jackson.jaxrs</groupId>
+        <artifactId>jackson-jaxrs-json-provider</artifactId>
+        <version>2.6.1</version>
+    </dependency>
+    <dependency>
+        <groupId>com.fasterxml.jackson.core</groupId>
+        <artifactId>jackson-annotations</artifactId>
+        <version>2.6.1</version>
+    </dependency>
+  </dependencies>
+
   <build>
     <plugins>
       <plugin>
-        <groupId>com.tibco.plugins</groupId>
-        <artifactId>bw6-maven-plugin</artifactId>
-        <version>1.3.1</version>
-        <extensions>true</extensions>
-      </plugin>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>properties-maven-plugin</artifactId>
-        <version>1.0.0</version>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-plugin-plugin</artifactId>
+        <version>3.2</version>
+        <configuration>
+          <goalPrefix>bw6maven</goalPrefix>
+          <skipErrorNoDescriptorsFound>true</skipErrorNoDescriptorsFound>
+        </configuration>
         <executions>
           <execution>
-            <phase>initialize</phase>
+            <id>mojo-descriptor</id>
             <goals>
-              <goal>read-project-properties</goal>
+              <goal>descriptor</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>help-goal</id>
+            <goals>
+              <goal>helpmojo</goal>
             </goals>
           </execution>
         </executions>
-        <configuration>
-          <files>
-            <file>${docker.property.file}</file>
-          </files>
-        </configuration>
       </plugin>
-      <plugin>
-        <groupId>io.fabric8</groupId>
-        <artifactId>docker-maven-plugin</artifactId>
-        <version>0.14.2</version>
+       <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.1</version>
         <configuration>
-          <skip>false</skip>
-          <dockerHost>${bwdocker.host}</dockerHost>
-          <certPath>${bwdocker.certPath}</certPath>
-          <images>
-            <image>
-              <alias>${bwdocker.containername}</alias>
-              <name>${docker.image}</name>
-              <build>
-                <from>${bwdocker.from}</from>
-                <maintainer>${bwdocker.maintainer}</maintainer>
-                <assembly>
-                  <basedir>/</basedir>
-                  <descriptorRef>artifact</descriptorRef>
-                </assembly>
-                <tags>
-                  <tag>latest</tag>
-                </tags>
-                <ports>
-                  <port>8080</port>
-                </ports>
-              </build>
-              <run>
-                <namingStrategy>alias</namingStrategy>
-              </run>
-            </image>
-          </images>
+          <source>1.7</source>
+          <target>1.7</target>
         </configuration>
       </plugin>
     </plugins>
